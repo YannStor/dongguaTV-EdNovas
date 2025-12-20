@@ -19,9 +19,9 @@ const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'db.json');
 const TEMPLATE_FILE = path.join(__dirname, 'db.template.json');
 
-// 图片缓存目录
+// 图片缓存目录 (仅本地/Docker 环境)
 const IMAGE_CACHE_DIR = path.join(__dirname, 'public/cache/images');
-if (!fs.existsSync(IMAGE_CACHE_DIR)) {
+if (!process.env.VERCEL && !fs.existsSync(IMAGE_CACHE_DIR)) {
     fs.mkdirSync(IMAGE_CACHE_DIR, { recursive: true });
 }
 
@@ -71,8 +71,8 @@ const CACHE_DB_FILE = path.join(__dirname, 'cache.db');
 
 console.log(`[System] Cache Type: ${CACHE_TYPE}`);
 
-// 初始化数据库文件
-if (!fs.existsSync(DATA_FILE)) {
+// 初始化数据库文件 (仅本地/Docker 环境)
+if (!process.env.VERCEL && !fs.existsSync(DATA_FILE)) {
     if (fs.existsSync(TEMPLATE_FILE)) {
         fs.copyFileSync(TEMPLATE_FILE, DATA_FILE);
         console.log('[Init] 已从模板创建 db.json');
@@ -871,15 +871,14 @@ function getDB() {
     return JSON.parse(fs.readFileSync(DATA_FILE));
 }
 
-// Vercel Serverless 兼容：导出 app 模块
+// 本地/Docker 环境：启动服务器监听
 // Vercel 环境下不需要调用 listen()，它会自动处理
-if (process.env.VERCEL) {
-    // Vercel 环境：导出 Express app
-    module.exports = app;
-} else {
-    // 本地环境：正常启动服务器
+if (!process.env.VERCEL) {
     app.listen(PORT, () => {
         console.log(`Server running on http://localhost:${PORT}`);
         console.log(`Image Cache Directory: ${IMAGE_CACHE_DIR}`);
     });
 }
+
+// 始终导出 app 模块 (Vercel Serverless 需要)
+module.exports = app;

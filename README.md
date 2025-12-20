@@ -478,6 +478,13 @@ docker run -d -p 3000:3000 \
    - ❌ **环境变量只勾选了 Preview 没勾选 Production**
    - ❌ **使用了错误的变量名**（如 `tmdb_api_key` 而非 `TMDB_API_KEY`）
 
+5. **Vercel 功能限制**：
+   由于 Vercel Serverless 无法写入文件系统，以下功能在 Vercel 上不可用：
+   - ❌ 本地图片缓存（会自动禁用）
+   - ❌ SQLite 缓存（使用内存缓存替代）
+   - ❌ 本地 db.json（必须配置 `REMOTE_DB_URL`）
+   - ❌ 多用户历史同步（需要持久化存储）
+
 
 ### 🖥️ Linux 服务器命令行部署 (PM2)
 适合常规 VPS (Ubuntu/CentOS/Debian)。
