@@ -679,12 +679,12 @@ docker run -d -p 3000:3000 \
 4.  点击 **映射/绑定域名**，输入您的域名 (如 `movie.example.com`)。
 5.  访问域名即可使用。
 
-### 🤖 Android APP 构建 (GitHub Actions)
+#### 🤖 Android APP 构建 (GitHub Actions)
 
-本项目配置了自动化构建流程，您可以轻松编译自己的 Android 客户端。
+本项目配置了自动化构建流程。由于构建 APK 耗时较长，**默认仅在推送 Tag 时触发构建**，普通代码提交不会触发。
 
 1.  **Fork 本仓库** 到您的 GitHub 账号。
-2.  **提交 Tag**：
+2.  **提交 Tag (触发构建)**：
     每当您推送一个以 `v` 开头的 Tag (例如 `v1.0.0`) 到仓库时，GitHub Actions 会自动触发构建。
     ```bash
     git tag v1.0.0
